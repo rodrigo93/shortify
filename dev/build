@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -e
+
+# check if local dev machine has docker installed
+command -v docker >/dev/null 2>&1 || { echo >&2 "'docker' command not available. Aborting."; exit 1; }
+command -v docker-compose >/dev/null 2>&1 || { echo >&2 "'docker-compose' command not available. Aborting."; exit 1; }
+
+# build all service images
+docker-compose build

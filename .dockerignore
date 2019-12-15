@@ -1,0 +1,15 @@
+.git*
+db/*.sqlite3
+db/*.sqlite3-journal
+log/*
+tmp/*
+Dockerfile
+
+# Custom folders and files
+dev/*
+
+# Editor temp files
+*.swp
+*.swo
+
+
