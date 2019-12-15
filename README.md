@@ -8,7 +8,21 @@ A simple URL shortener.
 
 # Stack
 
-_TODO_
+## Tools
+
+### Lints
+#### Ruby
+
+- [brakeman](https://github.com/presidentbeef/brakeman): static analysis security vulnerability scanner for Ruby on Rails applications (via [pronto-brakeman](https://github.com/prontolabs/pronto-brakeman))
+- [fasterer](https://github.com/DamirSvrtan/fasterer): performance checker and suggester (via [pronto-fasterer](https://github.com/prontolabs/pronto-fasterer))
+- [flay](https://github.com/seattlerb/flay): analyzes code for structural similarities (via [pronto-flay](https://github.com/prontolabs/pronto-flay))
+- [reek](https://github.com/troessner/reek): code smell detector for Ruby (via [pronto-reek](https://github.com/prontolabs/pronto-reek))
+- [rubocop](https://github.com/rubocop-hq/rubocop): Ruby static code analyzer and formatter, based on the community Ruby style guide (via [pronto-rubocop](https://github.com/prontolabs/pronto-rubocop))
+
+#### Git
+
+- [poper](https://github.com/mmozuras/poper): makes sure that your git commit messages are well-formed (via [pronto-poper](https://github.com/prontolabs/pronto-poper))
+
 
 # Setup
 
@@ -34,7 +48,11 @@ _TODO_
 
 ### Available commands
 
-- `dev/build`
+> `dev/bash`
+
+Open a bash session inside a temporary `shortify` container.
+
+> `dev/build`
 
 Build and run everything that is declared in `Dockerfile`.
 

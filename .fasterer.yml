@@ -1,0 +1,6 @@
+---
+
+# Reference: https://github.com/DamirSvrtan/fasterer#configuration
+
+exclude_paths:
+  - '.git/**/*'
