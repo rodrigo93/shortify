@@ -5,3 +5,7 @@ services:
     build: .
     ports:
       - '3000:3000'
+    volumes:
+      - .:/app
+      - ./.git:/app/.git
+      - ./.gitignore:/app/.gitignore
