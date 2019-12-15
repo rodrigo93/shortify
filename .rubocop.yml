@@ -1,0 +1,53 @@
+---
+
+# References:
+# http://docs.rubocop.org/en/latest/
+# https://github.com/rubocop-hq/rubocop/blob/master/config/default.yml
+
+AllCops:
+  Exclude:
+    - 'coverage/**/*'
+    - 'spec/**/*'
+    - '.git/**/*'
+    - 'db/seeds.rb'
+    - 'config/routes.rb'
+  DefaultFormatter: progress
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  TargetRubyVersion: 2.6.5
+
+# Cops configurations (only what's different from defaults)
+# Reference: http://docs.rubocop.org/en/latest/cops/
+
+# http://docs.rubocop.org/en/latest/cops_bundler/#bundlerorderedgems
+Bundler/OrderedGems:
+  Enabled: false
+
+# http://docs.rubocop.org/en/latest/cops_metrics/#metricslinelength
+Metrics/LineLength:
+  Max: 120
+
+# http://docs.rubocop.org/en/latest/cops_layout/#layoutdotposition
+Layout/DotPosition:
+  EnforcedStyle: trailing
+
+# http://docs.rubocop.org/en/latest/cops_layout/#layoutspacearoundequalsinparameterdefault
+Layout/SpaceAroundEqualsInParameterDefault:
+  EnforcedStyle: no_space
+
+# http://docs.rubocop.org/en/latest/cops_layout/#layoutspaceinlambdaliteral
+Layout/SpaceInLambdaLiteral:
+  EnforcedStyle: require_space
+
+# http://docs.rubocop.org/en/latest/cops_layout/#layoutspaceinsidehashliteralbraces
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+  EnforcedStyleForEmptyBraces: no_space
+
+# http://docs.rubocop.org/en/latest/cops_style/#styledocumentation
+Style/Documentation:
+  Enabled: false
+
+# http://docs.rubocop.org/en/latest/cops_style/#stylefrozenstringliteralcomment
+Style/FrozenStringLiteralComment:
+  Enabled: false

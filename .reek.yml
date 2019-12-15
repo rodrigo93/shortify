@@ -1,0 +1,49 @@
+---
+
+# References:
+# https://github.com/troessner/reek#configuration-options
+
+exclude_paths:
+  - bin
+  - coverage
+  - node_modules
+  - public
+  - spec
+  - storage
+  - tmp
+  - vendor
+
+detectors:
+  # https://github.com/troessner/reek/blob/master/docs/Irresponsible-Module.md
+  IrresponsibleModule:
+    enabled: false
+
+  # https://github.com/troessner/reek/blob/master/docs/Nil-Check.md
+  NilCheck:
+    enabled: false
+
+  # https://github.com/troessner/reek/blob/master/docs/Too-Many-Statements.md
+  TooManyStatements:
+    enabled: false # Rubocop's responsability
+
+directories:
+  "app/controllers":
+    # https://github.com/troessner/reek/blob/master/docs/Nested-Iterators.md
+    NestedIterators:
+      max_allowed_nesting: 2
+    # https://github.com/troessner/reek/blob/master/docs/Unused-Private-Method.md
+    UnusedPrivateMethod:
+      enabled: false
+    # https://github.com/troessner/reek/blob/master/docs/Instance-Variable-Assumption.md
+    InstanceVariableAssumption:
+      enabled: false
+
+  "app/helpers":
+    # https://github.com/troessner/reek/blob/master/docs/Utility-Function.md
+    UtilityFunction:
+      enabled: false
+
+  "app/mailers":
+    # https://github.com/troessner/reek/blob/master/docs/Instance-Variable-Assumption.md
+    InstanceVariableAssumption:
+      enabled: false
