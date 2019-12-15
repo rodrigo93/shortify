@@ -2,6 +2,10 @@
 
 A simple URL shortener.
 
+# Projects
+
+- [First release](https://github.com/rodrigo93/shortify/projects/1)
+
 # Stack
 
 _TODO_
