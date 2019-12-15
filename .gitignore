@@ -57,3 +57,6 @@ build-iPhoneSimulator/
 
 # IntelliJ files
 .idea
+
+# Log files
+log/*

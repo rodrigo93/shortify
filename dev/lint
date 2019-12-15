@@ -9,7 +9,7 @@ case $1 in
   --help|help|-h)
     echo "Execute the application linters."
     echo "Usage: (on the project's root path)"
-    echo "  bin/dev/lint"
+    echo "  dev/lint"
     ;;
   *)
     echo "Analyzing all code..."

@@ -1,4 +1,4 @@
 #!/bin/sh
 
-bin/dev/stop
-bin/dev/start
+dev/stop
+dev/start
