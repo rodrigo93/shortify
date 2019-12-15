@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -e
+
+SERVICE_NAME='shortify'
+docker-compose exec \
+  -e RAKE_ENV=test \
+  -e RAILS_ENV=test \
+  -e NODE_ENV=test \
+  -e APP_ENV=test \
+  $SERVICE_NAME \
+  bin/rails spec SPEC=$1 SPEC_OPTS="${*}"

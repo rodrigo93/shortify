@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -e 
+
+echo "Starting all containers in detached mode..."
+docker-compose up -d

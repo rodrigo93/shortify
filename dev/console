@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e 
+
+SERVICE_NAME='shortify'
+
+SERVICE_ID=`docker-compose ps -q $SERVICE_NAME`
+if [ -z $SERVICE_ID ] || [ -z `docker ps -q -f "status=running" --no-trunc | grep $SERVICE_ID` ]; then
+  echo "Service '$SERVICE_NAME' is not running!"
+  exit 1
+fi
+
+echo "Opening a Rails console inside the container of the '$SERVICE_NAME' service..."
+echo "Hit CTRL-D (or type 'exit') to end the session."
+docker-compose exec $SERVICE_NAME bin/rails console

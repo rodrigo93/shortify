@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -e
+
+SERVICE_NAME='shortify'
+DOCKER_COMMAND="docker-compose run --rm $SERVICE_NAME"
+
+case $1 in
+  --help|help|-h)
+    echo "Execute the application linters."
+    echo "Usage: (on the project's root path)"
+    echo "  bin/dev/lint"
+    ;;
+  *)
+    echo "Analyzing all code..."
+    $DOCKER_COMMAND bin/pronto run
+esac
