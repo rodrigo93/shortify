@@ -40,6 +40,8 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 
   gem 'rspec-rails', '4.0.0.beta3'
+  gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
+  gem 'timecop', '~> 0.8.1'
 end
 
 group :development do
