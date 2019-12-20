@@ -12,6 +12,7 @@ exclude_paths:
   - storage
   - tmp
   - vendor
+  - db
 
 detectors:
   # https://github.com/troessner/reek/blob/master/docs/Irresponsible-Module.md
@@ -24,7 +25,7 @@ detectors:
 
   # https://github.com/troessner/reek/blob/master/docs/Too-Many-Statements.md
   TooManyStatements:
-    enabled: false # Rubocop's responsability
+    enabled: false # Rubocop's responsibility
 
 directories:
   "app/controllers":
@@ -36,6 +37,9 @@ directories:
       enabled: false
     # https://github.com/troessner/reek/blob/master/docs/Instance-Variable-Assumption.md
     InstanceVariableAssumption:
+      enabled: false
+  "app/controllers/api/v1/**":
+    UncommunicativeModuleName:
       enabled: false
 
   "app/helpers":

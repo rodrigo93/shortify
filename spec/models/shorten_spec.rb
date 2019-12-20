@@ -50,6 +50,8 @@ RSpec.describe Shorten, type: :model do
   describe '#register_redirect!' do
     let(:expected_time) { Time.zone.now.change(usec: 0) }
 
+    before { subject.save }
+
     it 'should increase "redirectCount" by one' do
       expect(subject.redirectCount).to be_zero
 
@@ -65,6 +67,34 @@ RSpec.describe Shorten, type: :model do
         subject.register_redirect!
 
         expect(subject.reload.lastSeenDate).to eq expected_time
+      end
+    end
+  end
+
+  describe '#register_redirect' do
+    let(:expected_time) { Time.zone.now.change(usec: 0) }
+
+    before { subject.save }
+
+    it 'should increase "redirectCount" by one, but not persist it' do
+      expect(subject.redirectCount).to be_zero
+
+      subject.register_redirect
+
+      expect(subject.redirectCount).to eq 1
+
+      expect(subject.reload.redirectCount).to be_zero
+    end
+
+    it 'should update the "lastSeenDate", but not persist it' do
+      Timecop.freeze(expected_time) do
+        expect(subject.lastSeenDate).to be_nil
+
+        subject.register_redirect
+
+        expect(subject.lastSeenDate).to eq expected_time
+
+        expect(subject.reload.lastSeenDate).to be_nil
       end
     end
   end

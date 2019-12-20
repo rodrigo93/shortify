@@ -11,6 +11,8 @@ AllCops:
     - '.git/**/*'
     - 'db/seeds.rb'
     - 'config/routes.rb'
+    - 'db/**/*'
+    - 'config/**/*'
   DefaultFormatter: progress
   DisplayCopNames: true
   DisplayStyleGuide: true
