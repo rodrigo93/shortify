@@ -29,11 +29,21 @@ RSpec.describe Shorten, type: :model do
   end
 
   describe 'start_date_iso_8601' do
-    let(:start_date)        { expect_date_time }
-    let(:expect_date_time)  { "2019-12-16T12:44:54.53970Z" }
+    context 'when it has a "startDate"' do
+      let(:start_date)        { expect_date_time }
+      let(:expect_date_time)  { "2019-12-16T12:44:54.53970Z" }
+      
+      it 'should return the "startDate" in the ISO8601 format with a precision of 5 fractional seconds' do
+        expect(subject.start_date_iso_8601).to eq expect_date_time
+      end
+    end
 
-    it 'should return the "startDate" in the ISO8601 format' do
-      expect(subject.start_date_iso_8601).to eq expect_date_time
+    context 'when does not have a "startDate"' do
+      let(:start_date) { nil }
+
+      it 'should return "nil"' do
+        expect(subject.start_date_iso_8601).to be_nil
+      end
     end
   end
 

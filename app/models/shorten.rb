@@ -4,4 +4,8 @@ class Shorten < ApplicationRecord
   validates_presence_of :url, :shortcode
   validates_uniqueness_of :shortcode, case_sensitive: true
 
+  def start_date_iso_8601
+    startDate&.iso8601(5)
+  end
+
 end
