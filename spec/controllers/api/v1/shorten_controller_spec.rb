@@ -78,15 +78,35 @@ RSpec.describe Api::V1::ShortenController, type: :controller do
       end
     end
 
-    context 'when the "url" is not present' do
+    context 'when validating the "url"' do
+      shared_context 'returning a bad request' do
+        it 'should return error 400 (bad request)' do
+          subject
+
+          expect(response).to have_http_status(:bad_request)
+        end
+      end
+
       subject { post :create, params: params }
 
-      let(:params) { nil }
+      context "and it's not present" do
+        let(:params) do
+          {
+              shorten: {
+                  shortcode: 'some-random-code'
+              }
+          }
+        end
 
-      # it_should_behave_like 'returning json content-type'
+        it_should_behave_like 'returning json content-type'
 
-      xit 'should return error 400 (bad request)' do
-        
+        it_should_behave_like 'returning a bad request'
+
+        it 'should return error "URL can\'t be blank" message' do
+          subject
+
+          expect(response.body).to eq({url: ["can't be blank"]}.to_json)
+        end
       end
     end
   end

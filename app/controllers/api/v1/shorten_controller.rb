@@ -16,7 +16,7 @@ module Api
         if @shorten.save
           render json: @shorten, status: :created
         else
-          render json: @shorten.errors, status: :unprocessable_entity
+          render json: @shorten.errors, status: :bad_request
         end
       end
 
