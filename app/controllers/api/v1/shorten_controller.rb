@@ -1,6 +1,7 @@
 module Api
   module V1
     class ShortenController < Api::V1::ApplicationController
+      before_action :check_existence, only: %i[create]
       before_action :set_shorten, only: %i[show]
 
       # GET /api/v1/:shortcode
@@ -20,6 +21,12 @@ module Api
       end
 
       private
+
+      def check_existence
+        return unless Shorten.find_by_shortcode(params.dig(:shorten, :shortcode))
+
+        render json: { error: 'Shortcode has already been taken' }, status: :conflict, content_type: 'application/json'
+      end
 
       # Use callbacks to share common setup or constraints between actions.
       def set_shorten
