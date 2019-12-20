@@ -17,7 +17,7 @@ RSpec.describe Shorten, type: :model do
   let(:shortcode)       { 'marques' }
   let(:start_date)      { '2019-12-12T12:15:00.00000Z' }
   let(:last_seen_date)  { nil }
-  let(:redirect_count)  { nil }
+  let(:redirect_count)  { 0 }
 
   describe 'validations' do
     it { is_expected.to validate_uniqueness_of(:shortcode) }
@@ -32,7 +32,7 @@ RSpec.describe Shorten, type: :model do
     context 'when it has a "startDate"' do
       let(:start_date)        { expect_date_time }
       let(:expect_date_time)  { "2019-12-16T12:44:54.53970Z" }
-      
+
       it 'should return the "startDate" in the ISO8601 format with a precision of 5 fractional seconds' do
         expect(subject.start_date_iso_8601).to eq expect_date_time
       end
@@ -48,21 +48,23 @@ RSpec.describe Shorten, type: :model do
   end
 
   describe '#register_redirect!' do
+    let(:expected_time) { Time.zone.now.change(usec: 0) }
+
     it 'should increase "redirectCount" by one' do
-      expect(subject.redirectCount).to be_nil
+      expect(subject.redirectCount).to be_zero
 
-      subject.register_redirect
+      subject.register_redirect!
 
-      expect(subject.redirectCount).to eq 1
+      expect(subject.reload.redirectCount).to eq 1
     end
 
     it 'should update the "lastSeenDate"' do
-      Timecop.freeze(1.second.from_now) do
+      Timecop.freeze(expected_time) do
         expect(subject.lastSeenDate).to be_nil
 
         subject.register_redirect!
 
-        expect(subject.lastSeenDate).to eq Time.zone.now
+        expect(subject.reload.lastSeenDate).to eq expected_time
       end
     end
   end
