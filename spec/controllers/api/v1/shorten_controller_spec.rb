@@ -16,7 +16,7 @@ RSpec.describe Api::V1::ShortenController, type: :controller do
       expect(response).to have_http_status(:not_found)
     end
   end
-  
+
   describe '#POST create' do
     context 'when everything is ok' do
       subject { post :create, params: params }
@@ -210,35 +210,70 @@ RSpec.describe Api::V1::ShortenController, type: :controller do
     subject { get :stats, params: { shortcode: a_shortcode } }
 
     context 'when the Shorten exists' do
-      let(:start_date) { 2.days.ago }
-      let(:last_seen_date) { Time.zone.now.change(usec: 0) }
-      let(:redirect_count) { 123 }
+      let(:start_date) { Time.zone.now.change(usec: 0) }
+      let(:last_seen_date) { 2.days.from_now }
       let(:a_shortcode) { 'example' }
 
-      let!(:shorten) { Shorten.create!(url: 'example.com', shortcode: a_shortcode, lastSeenDate: last_seen_date, redirectCount: redirect_count) }
-
-      it 'should return a response with status 200 (ok)' do
-        subject
-
-        expect(response).to have_http_status(:ok)
+      let!(:shorten) do
+        Shorten.create!(
+            url: 'example.com',
+            shortcode: a_shortcode,
+            lastSeenDate: last_seen_date,
+            redirectCount: redirect_count
+        )
       end
 
-      it 'should return the "startDate" in ISO8601 format' do
-        subject
+      before { Timecop.freeze(last_seen_date) }
+      after  { Timecop.return }
 
-        expect(JSON.parse(response.body)['startDate']).to eq shorten.startDate.iso8601(5)
+      shared_context 'returning status code 200' do
+        it 'should return a response with status 200 (ok)' do
+          subject
+
+          expect(response).to have_http_status(:ok)
+        end
       end
 
-      it 'should return the "lastSeenDate"' do
-        subject
+      shared_context 'returning "startDate" and "redirectCount"' do
+        it 'should return the "startDate" in ISO8601 format' do
+          subject
 
-        expect(JSON.parse(response.body)['lastSeenDate']).to eq last_seen_date
+          expect(JSON.parse(response.body)['startDate']).to eq shorten.startDate.iso8601(5)
+        end
+
+        it 'should return the "redirectCount"' do
+          subject
+
+          expect(JSON.parse(response.body)['redirectCount']).to eq redirect_count
+        end
       end
 
-      it 'should return the "redirectCount"' do
-        subject
+      context 'with "redirectCount" as zero' do
+        let(:redirect_count) { 0 }
 
-        expect(JSON.parse(response.body)['lastSeenDate']).to eq redirect_count
+        it_should_behave_like 'returning json content-type'
+        it_should_behave_like 'returning status code 200'
+        it_should_behave_like 'returning "startDate" and "redirectCount"'
+
+        it 'should not return the "lastSeenDate" field' do
+          subject
+
+          expect(JSON.parse(response.body)['lastSeenDate']).to be_nil
+        end
+      end
+
+      context 'with "redirectCount" greater than zero' do
+        let(:redirect_count) { 123 }
+
+        it_should_behave_like 'returning json content-type'
+        it_should_behave_like 'returning status code 200'
+        it_should_behave_like 'returning "startDate" and "redirectCount"'
+
+        it 'should return the "lastSeenDate"' do
+          subject
+
+          expect(JSON.parse(response.body)['lastSeenDate']).to eq last_seen_date.as_json
+        end
       end
     end
 
@@ -246,6 +281,8 @@ RSpec.describe Api::V1::ShortenController, type: :controller do
       let(:a_shortcode) { 'hello_world' }
 
       it_should_behave_like 'returning not found status'
+
+      it_should_behave_like 'returning json content-type'
     end
   end
 end

@@ -1,6 +1,8 @@
 class Shorten < ApplicationRecord
   before_validation :generate_random_unique_shortcode, unless: -> { self.shortcode.present? }
 
+  before_save :set_start_date
+
   validates_format_of :shortcode,
                       with: /\A^[0-9a-zA-Z_]{4,}$\z/,
                       message: 'The "shortcode" must have only numbers and letters, with at least 4 characters'
@@ -30,5 +32,9 @@ class Shorten < ApplicationRecord
       random_short = SecureRandom.hex(3)
       break random_short unless self.class.exists?(shortcode: random_short)
     end
+  end
+
+  def set_start_date
+    self.startDate = Time.zone.now
   end
 end
