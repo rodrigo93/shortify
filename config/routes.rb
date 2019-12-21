@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       resources :shorten, only: %i[create]
 
       get 'shorten/:shortcode', to: 'shorten#show'
+      get 'shorten/:shortcode/stats', to: 'shorten#stats'
     end
   end
 end
