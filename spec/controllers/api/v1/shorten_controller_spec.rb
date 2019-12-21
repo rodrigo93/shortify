@@ -64,10 +64,10 @@ RSpec.describe Api::V1::ShortenController, type: :controller do
           expect{ subject }.to change{ Shorten.count }.by(1)
         end
 
-        xit 'should return the generated "shortcode"' do
+        it 'should return the generated "shortcode"' do
           subject
 
-          expect(response.body).to eq({ shortcode: sample_shortcode }.to_json)
+          expect(JSON.parse(response.body)['shortcode']).to match(/\A^[0-9a-zA-Z_]{6}$\z/)
         end
       end
     end
