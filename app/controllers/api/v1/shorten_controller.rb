@@ -4,7 +4,7 @@ module Api
       before_action :check_existence, only: %i[create]
       before_action :validate_params, only: %i[create]
 
-      before_action :set_shorten, only: %i[show]
+      before_action :set_shorten, only: %i[show stats]
 
       rescue_from ActiveRecord::RecordNotFound do
         render json: {error: 'The shortcode cannot be found in the system'}, status: :not_found
@@ -14,7 +14,15 @@ module Api
       def show
         @shorten.register_redirect!
 
-        render json: {Location: @shorten.url}
+        render json: {Location: @shorten.url}, status: :found
+      end
+
+      # GET /api/v1/:shortcode/stats
+      def stats
+        json_response = {redirectCount: @shorten.redirectCount, startDate: @shorten.start_date_iso_8601}
+        json_response.merge!(lastSeenDate: @shorten.lastSeenDate) if @shorten.redirectCount > 0
+
+        render json: json_response
       end
 
       # POST /api/v1/shorten
