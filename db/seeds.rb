@@ -5,3 +5,9 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+shortens = Shorten.create([
+                {url: 'example1.com', shortcode: 'example1'},
+                {url: 'example2.com', shortcode: 'example2', redirectCount: 123, lastSeenDate: Time.zone.now},
+                {url: 'example3.com'},
+            ])
