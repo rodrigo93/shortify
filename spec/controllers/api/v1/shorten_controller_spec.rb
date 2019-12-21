@@ -1,15 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::ShortenController, type: :controller do
-  describe '#POST create' do
-    shared_context 'returning json content-type' do
-      it 'should return a request with header Content-Type: "application/json"' do
-        subject
+  shared_context 'returning json content-type' do
+    it 'should return a request with header Content-Type: "application/json"' do
+      subject
 
-        expect(response.content_type).to eq('application/json; charset=utf-8')
-      end
+      expect(response.content_type).to eq('application/json; charset=utf-8')
     end
-
+  end
+  
+  describe '#POST create' do
     context 'when everything is ok' do
       subject { post :create, params: params }
 
@@ -146,6 +146,52 @@ RSpec.describe Api::V1::ShortenController, type: :controller do
 
           expect(response.body).to eq({url: "can't be blank"}.to_json)
         end
+      end
+    end
+  end
+
+  describe '#GET show' do
+    subject { get :show, params: { shortcode: some_shortcode } }
+
+    context 'when the Shorten exists' do
+      let!(:shorten) { Shorten.create!(url: expected_url, shortcode: some_shortcode) }
+      let(:expected_url) { 'findtheinvisiblecow.com' }
+      let(:some_shortcode) { 'cowcow' }
+
+      it_should_behave_like 'returning json content-type'
+
+      it 'should return the Shorten "Location" (url)' do
+        subject
+
+        expect(JSON.parse(response.body)['Location']).to eq expected_url
+      end
+
+      it "should increase the Shorten's redirectCount" do
+        expect(shorten.redirectCount).to eq 0
+
+        subject
+
+        expect(shorten.reload.redirectCount).to eq 1
+      end
+
+      it "should update the Shorten's lastSeenDate" do
+        expect(shorten.lastSeenDate).to be_nil
+
+        subject
+
+        expect(shorten.reload.lastSeenDate).not_to be_nil
+      end
+    end
+
+    context 'when the Shorten does not exist' do
+      let(:some_shortcode) { 'imaginary-shortcode' }
+
+      it_should_behave_like 'returning json content-type'
+
+      it 'should return status 404 (not found)' do
+        subject
+
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

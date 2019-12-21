@@ -3,7 +3,9 @@ Rails.application.routes.draw do
   #
   namespace :api do
     namespace :v1 do
-      resources :shorten, only: %i[create show]
+      resources :shorten, only: %i[create]
+
+      get 'shorten/:shortcode', to: 'shorten#show'
     end
   end
 end
