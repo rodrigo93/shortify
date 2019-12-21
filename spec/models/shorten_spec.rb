@@ -20,8 +20,10 @@ RSpec.describe Shorten, type: :model do
   let(:redirect_count)  { 0 }
 
   describe 'validations' do
-    it { is_expected.to validate_uniqueness_of(:shortcode) }
+    it { is_expected.not_to allow_value('', '    ', 'a', 'aa', 'aaa').for(:shortcode).with_message('The "shortcode" must have only numbers and letters, with at least 4 characters')}
+    it { is_expected.to allow_value('exam', 'exam_ple', '3x4_mpl3', 'e_x_4_m_p_l_3', '____').for(:shortcode).with_message('The "shortcode" must have only numbers and letters, with at least 4 characters')}
     it { is_expected.to validate_presence_of(:shortcode) }
+    it { is_expected.to validate_uniqueness_of(:shortcode) }
 
     it { is_expected.to validate_presence_of(:url) }
 
