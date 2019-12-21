@@ -14,7 +14,7 @@ module Api
         @shorten = Shorten.new(shorten_params)
 
         if @shorten.save
-          render json: @shorten, status: :created
+          render json: { shortcode: @shorten.shortcode }, status: :created
         else
           render json: @shorten.errors, status: :bad_request
         end

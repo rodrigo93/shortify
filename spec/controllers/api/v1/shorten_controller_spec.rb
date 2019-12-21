@@ -13,23 +13,35 @@ RSpec.describe Api::V1::ShortenController, type: :controller do
     context 'when everything is ok' do
       subject { post :create, params: params }
 
-      let(:params) { nil }
-
-      # it_should_behave_like 'returning json content-type'
-
-      xit 'should return status 201 (created)' do
-        
+      let(:sample_shortcode) { 'example' }
+      let(:params) do
+        {
+            shorten: {
+                shortcode: sample_shortcode,
+                url: 'example.com'
+            }
+        }
       end
 
-      xit 'should create a new Shorten' do
-        
+      it_should_behave_like 'returning json content-type'
+
+      it 'should return status 201 (created)' do
+        subject
+
+        expect(response).to have_http_status(:created)
       end
 
-      xit 'should return the generated "shortcode"' do
+      it 'should create a new Shorten' do
+        expect{ subject }.to change{ Shorten.count }.by(1)
+      end
 
+      it 'should return the generated "shortcode"' do
+        subject
+
+        expect(response.body).to eq({ shortcode: sample_shortcode }.to_json)
       end
     end
-    
+
     context 'when the "shortcode" is already in use' do
       subject { post :create, params: params }
 
@@ -74,7 +86,7 @@ RSpec.describe Api::V1::ShortenController, type: :controller do
       # it_should_behave_like 'returning json content-type'
 
       xit 'should return status 422 (unprocessable entity)' do
-        
+
       end
     end
 
