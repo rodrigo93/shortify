@@ -1,4 +1,7 @@
 class Shorten < ApplicationRecord
+  validates_format_of :shortcode,
+                      with: /\A^[0-9a-zA-Z_]{4,}$\z/,
+                      message: 'The "shortcode" must have only numbers and letters, with at least 4 characters'
   validates_numericality_of :redirectCount, greater_than_or_equal_to: 0
   validates_presence_of :url, :shortcode
   validates_uniqueness_of :shortcode, case_sensitive: true
