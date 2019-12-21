@@ -13,32 +13,62 @@ RSpec.describe Api::V1::ShortenController, type: :controller do
     context 'when everything is ok' do
       subject { post :create, params: params }
 
-      let(:sample_shortcode) { 'example' }
-      let(:params) do
-        {
-            shorten: {
-                shortcode: sample_shortcode,
-                url: 'example.com'
-            }
-        }
+      context 'with the "shortcode"' do
+        let(:sample_shortcode) { 'example' }
+        let(:params) do
+          {
+              shorten: {
+                  shortcode: sample_shortcode,
+                  url: 'example.com'
+              }
+          }
+        end
+
+        it_should_behave_like 'returning json content-type'
+
+        it 'should return status 201 (created)' do
+          subject
+
+          expect(response).to have_http_status(:created)
+        end
+
+        it 'should create a new Shorten' do
+          expect{ subject }.to change{ Shorten.count }.by(1)
+        end
+
+        it 'should return the generated "shortcode"' do
+          subject
+
+          expect(response.body).to eq({ shortcode: sample_shortcode }.to_json)
+        end
       end
 
-      it_should_behave_like 'returning json content-type'
+      context 'without the "shortcode"' do
+        let(:params) do
+          {
+              shorten: {
+                  url: 'example.com'
+              }
+          }
+        end
 
-      it 'should return status 201 (created)' do
-        subject
+        it_should_behave_like 'returning json content-type'
 
-        expect(response).to have_http_status(:created)
-      end
+        it 'should return status 201 (created)' do
+          subject
 
-      it 'should create a new Shorten' do
-        expect{ subject }.to change{ Shorten.count }.by(1)
-      end
+          expect(response).to have_http_status(:created)
+        end
 
-      it 'should return the generated "shortcode"' do
-        subject
+        it 'should create a new Shorten' do
+          expect{ subject }.to change{ Shorten.count }.by(1)
+        end
 
-        expect(response.body).to eq({ shortcode: sample_shortcode }.to_json)
+        xit 'should return the generated "shortcode"' do
+          subject
+
+          expect(response.body).to eq({ shortcode: sample_shortcode }.to_json)
+        end
       end
     end
 
@@ -79,14 +109,31 @@ RSpec.describe Api::V1::ShortenController, type: :controller do
     context 'when the "shortcode" does not match the regexp' do
       subject { post :create, params: params }
 
-      let(:params) { nil }
+      let(:params) do
+        {
+            shorten: {
+                url: 'magic.com',
+                shortcode: invalid_shortcode
+            }
+        }
+      end
 
-      let(:regex) { /^[0-9a-zA-Z_]{4,}$/ }
+      ['', ' ', '    ', 'inv', 'no_', '__', '****', '?????'].each do |invalid_short|
+        let(:invalid_shortcode) { invalid_short }
 
-      # it_should_behave_like 'returning json content-type'
+        it_should_behave_like 'returning json content-type'
 
-      xit 'should return status 422 (unprocessable entity)' do
+        it "should return status 422 (unprocessable entity) for '#{invalid_short}' shortcode" do
+          subject
 
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        it "should return 'The 'shortcode' must have only numbers and letters, with at least 4 characters' error message for '#{invalid_short}' shortcode" do
+          subject
+
+          expect(response.body).to eq({shortcode: ['The "shortcode" must have only numbers and letters, with at least 4 characters']}.to_json)
+        end
       end
     end
 
@@ -117,7 +164,7 @@ RSpec.describe Api::V1::ShortenController, type: :controller do
         it 'should return error "URL can\'t be blank" message' do
           subject
 
-          expect(response.body).to eq({url: ["can't be blank"]}.to_json)
+          expect(response.body).to eq({url: "can't be blank"}.to_json)
         end
       end
     end

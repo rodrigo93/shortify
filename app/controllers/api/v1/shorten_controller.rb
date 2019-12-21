@@ -2,6 +2,7 @@ module Api
   module V1
     class ShortenController < Api::V1::ApplicationController
       before_action :check_existence, only: %i[create]
+      before_action :validate_params, only: %i[create]
       before_action :set_shorten, only: %i[show]
 
       # GET /api/v1/:shortcode
@@ -16,7 +17,7 @@ module Api
         if @shorten.save
           render json: { shortcode: @shorten.shortcode }, status: :created
         else
-          render json: @shorten.errors, status: :bad_request
+          render json: @shorten.errors, status: :unprocessable_entity
         end
       end
 
@@ -26,6 +27,12 @@ module Api
         return unless Shorten.find_by_shortcode(params.dig(:shorten, :shortcode))
 
         render json: { error: 'Shortcode has already been taken' }, status: :conflict, content_type: 'application/json'
+      end
+
+      def validate_params
+        return if shorten_params.has_key?(:url)
+
+        render json: { url: "can't be blank" }, status: :bad_request
       end
 
       # Use callbacks to share common setup or constraints between actions.
