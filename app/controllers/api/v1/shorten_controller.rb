@@ -1,6 +1,6 @@
 module Api
   module V1
-    class ShortenController < Api::V1::ApplicationController
+    class ShortenController < ApplicationController
       before_action :check_existence, only: %i[create]
       before_action :validate_params, only: %i[create]
       before_action :set_shorten, only: %i[show]
@@ -24,7 +24,7 @@ module Api
       private
 
       def check_existence
-        return unless Shorten.find_by_shortcode(params.dig(:shorten, :shortcode))
+        return unless Shorten.find_by_shortcode(params[:shortcode])
 
         render json: { error: 'Shortcode has already been taken' }, status: :conflict, content_type: 'application/json'
       end
@@ -42,7 +42,7 @@ module Api
 
       # Only allow a trusted parameter "white list" through.
       def shorten_params
-        params.require(:shorten).permit(:url, :shortcode)
+        params.permit(:url, :shortcode)
       end
     end
   end

@@ -17,10 +17,8 @@ RSpec.describe Api::V1::ShortenController, type: :controller do
         let(:sample_shortcode) { 'example' }
         let(:params) do
           {
-              shorten: {
-                  shortcode: sample_shortcode,
-                  url: 'example.com'
-              }
+              shortcode: sample_shortcode,
+              url: 'example.com'
           }
         end
 
@@ -33,24 +31,18 @@ RSpec.describe Api::V1::ShortenController, type: :controller do
         end
 
         it 'should create a new Shorten' do
-          expect{ subject }.to change{ Shorten.count }.by(1)
+          expect { subject }.to change { Shorten.count }.by(1)
         end
 
         it 'should return the generated "shortcode"' do
           subject
 
-          expect(response.body).to eq({ shortcode: sample_shortcode }.to_json)
+          expect(response.body).to eq({shortcode: sample_shortcode}.to_json)
         end
       end
 
       context 'without the "shortcode"' do
-        let(:params) do
-          {
-              shorten: {
-                  url: 'example.com'
-              }
-          }
-        end
+        let(:params) { {url: 'example.com'} }
 
         it_should_behave_like 'returning json content-type'
 
@@ -61,7 +53,7 @@ RSpec.describe Api::V1::ShortenController, type: :controller do
         end
 
         it 'should create a new Shorten' do
-          expect{ subject }.to change{ Shorten.count }.by(1)
+          expect { subject }.to change { Shorten.count }.by(1)
         end
 
         it 'should return the generated "shortcode"' do
@@ -80,10 +72,8 @@ RSpec.describe Api::V1::ShortenController, type: :controller do
 
       let(:params) do
         {
-            shorten: {
-                url: some_url,
-                shortcode: used_shortcode
-            }
+            url: some_url,
+            shortcode: used_shortcode
         }
       end
 
@@ -100,9 +90,7 @@ RSpec.describe Api::V1::ShortenController, type: :controller do
       it 'should return an intuitive error message' do
         subject
 
-        error_message = 'Shortcode has already been taken'
-
-        expect(response.body).to eq({ error: error_message }.to_json)
+        expect(response.body).to eq({error: 'Shortcode has already been taken'}.to_json)
       end
     end
 
@@ -111,10 +99,8 @@ RSpec.describe Api::V1::ShortenController, type: :controller do
 
       let(:params) do
         {
-            shorten: {
-                url: 'magic.com',
-                shortcode: invalid_shortcode
-            }
+            url: 'magic.com',
+            shortcode: invalid_shortcode
         }
       end
 
@@ -149,13 +135,7 @@ RSpec.describe Api::V1::ShortenController, type: :controller do
       subject { post :create, params: params }
 
       context "and it's not present" do
-        let(:params) do
-          {
-              shorten: {
-                  shortcode: 'some-random-code'
-              }
-          }
-        end
+        let(:params) { {shortcode: 'some-random-code'} }
 
         it_should_behave_like 'returning json content-type'
 
