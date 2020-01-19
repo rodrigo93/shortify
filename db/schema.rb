@@ -13,9 +13,9 @@
 ActiveRecord::Schema.define(version: 2019_12_15_212402) do
 
   create_table "shortens", force: :cascade do |t|
-    t.datetime "startDate"
-    t.datetime "lastSeenDate"
-    t.integer "redirectCount", default: 0
+    t.datetime "start_date"
+    t.datetime "last_seen_date"
+    t.integer "redirect_count", default: 0
     t.string "url", null: false
     t.string "shortcode", null: false
     t.datetime "created_at", precision: 6, null: false

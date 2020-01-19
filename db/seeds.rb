@@ -8,6 +8,6 @@
 
 shortens = Shorten.create([
                 {url: 'example1.com', shortcode: 'example1'},
-                {url: 'example2.com', shortcode: 'example2', redirectCount: 123, lastSeenDate: Time.zone.now},
+                {url: 'example2.com', shortcode: 'example2', redirect_count: 123, last_seen_date: Time.zone.now},
                 {url: 'example3.com'},
             ])

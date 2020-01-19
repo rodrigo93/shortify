@@ -60,3 +60,6 @@ build-iPhoneSimulator/
 
 # Log files
 log/*
+
+# SQLite3 files
+*.sqlite3

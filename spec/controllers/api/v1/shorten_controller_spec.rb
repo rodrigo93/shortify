@@ -180,20 +180,20 @@ RSpec.describe Api::V1::ShortenController, type: :controller do
         expect(JSON.parse(response.body)['Location']).to eq expected_url
       end
 
-      it "should increase the Shorten's redirectCount" do
-        expect(shorten.redirectCount).to eq 0
+      it "should increase the Shorten's redirect_count" do
+        expect(shorten.redirect_count).to eq 0
 
         subject
 
-        expect(shorten.reload.redirectCount).to eq 1
+        expect(shorten.reload.redirect_count).to eq 1
       end
 
-      it "should update the Shorten's lastSeenDate" do
-        expect(shorten.lastSeenDate).to be_nil
+      it "should update the Shorten's last_seen_date" do
+        expect(shorten.last_seen_date).to be_nil
 
         subject
 
-        expect(shorten.reload.lastSeenDate).not_to be_nil
+        expect(shorten.reload.last_seen_date).not_to be_nil
       end
     end
 
@@ -218,8 +218,8 @@ RSpec.describe Api::V1::ShortenController, type: :controller do
         Shorten.create!(
             url: 'example.com',
             shortcode: a_shortcode,
-            lastSeenDate: last_seen_date,
-            redirectCount: redirect_count
+            last_seen_date: last_seen_date,
+            redirect_count: redirect_count
         )
       end
 
@@ -234,45 +234,45 @@ RSpec.describe Api::V1::ShortenController, type: :controller do
         end
       end
 
-      shared_context 'returning "startDate" and "redirectCount"' do
-        it 'should return the "startDate" in ISO8601 format' do
+      shared_context 'returning "start_date" and "redirect_count"' do
+        it 'should return the "start_date" in ISO8601 format' do
           subject
 
-          expect(JSON.parse(response.body)['startDate']).to eq shorten.startDate.iso8601(5)
+          expect(JSON.parse(response.body)['start_date']).to eq shorten.start_date.iso8601(5)
         end
 
-        it 'should return the "redirectCount"' do
+        it 'should return the "redirect_count"' do
           subject
 
-          expect(JSON.parse(response.body)['redirectCount']).to eq redirect_count
+          expect(JSON.parse(response.body)['redirect_count']).to eq redirect_count
         end
       end
 
-      context 'with "redirectCount" as zero' do
+      context 'with "redirect_count" as zero' do
         let(:redirect_count) { 0 }
 
         it_should_behave_like 'returning json content-type'
         it_should_behave_like 'returning status code 200'
-        it_should_behave_like 'returning "startDate" and "redirectCount"'
+        it_should_behave_like 'returning "start_date" and "redirect_count"'
 
-        it 'should not return the "lastSeenDate" field' do
+        it 'should not return the "last_seen_date" field' do
           subject
 
-          expect(JSON.parse(response.body)['lastSeenDate']).to be_nil
+          expect(JSON.parse(response.body)['last_seen_date']).to be_nil
         end
       end
 
-      context 'with "redirectCount" greater than zero' do
+      context 'with "redirect_count" greater than zero' do
         let(:redirect_count) { 123 }
 
         it_should_behave_like 'returning json content-type'
         it_should_behave_like 'returning status code 200'
-        it_should_behave_like 'returning "startDate" and "redirectCount"'
+        it_should_behave_like 'returning "start_date" and "redirect_count"'
 
-        it 'should return the "lastSeenDate"' do
+        it 'should return the "last_seen_date"' do
           subject
 
-          expect(JSON.parse(response.body)['lastSeenDate']).to eq last_seen_date.as_json
+          expect(JSON.parse(response.body)['last_seen_date']).to eq last_seen_date.as_json
         end
       end
     end

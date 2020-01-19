@@ -1,28 +1,27 @@
 class Shorten < ApplicationRecord
-  before_validation :generate_random_unique_shortcode, unless: -> { self.shortcode.present? }
+  before_validation :generate_random_unique_shortcode, if: -> { self.shortcode.nil? }
 
   before_save :set_start_date
 
   validates_format_of :shortcode,
                       with: /\A^[0-9a-zA-Z_]{4,}$\z/,
                       message: 'The "shortcode" must have only numbers and letters, with at least 4 characters'
-  validates_numericality_of :redirectCount, greater_than_or_equal_to: 0
-  validates_presence_of :url, :shortcode
-  validates_uniqueness_of :shortcode, case_sensitive: true
+  validates_numericality_of :redirect_count, greater_than_or_equal_to: 0
+  validates_presence_of :url
 
   def register_redirect!
-    count_incremented = redirectCount + 1
+    count_incremented = redirect_count + 1
 
-    update_attributes(redirectCount: count_incremented, lastSeenDate: Time.zone.now)
+    update_attributes(redirect_count: count_incremented, last_seen_date: Time.zone.now)
   end
 
   def register_redirect
-    self.redirectCount = redirectCount + 1
-    self.lastSeenDate = Time.zone.now
+    self.redirect_count = redirect_count + 1
+    self.last_seen_date = Time.zone.now
   end
 
   def start_date_iso_8601
-    startDate&.iso8601(5)
+    start_date&.iso8601(5)
   end
 
   private
@@ -35,6 +34,6 @@ class Shorten < ApplicationRecord
   end
 
   def set_start_date
-    self.startDate = Time.zone.now
+    self.start_date = Time.zone.now
   end
 end

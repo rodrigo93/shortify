@@ -19,8 +19,8 @@ module Api
 
       # GET /api/v1/:shortcode/stats
       def stats
-        json_response = {redirectCount: @shorten.redirectCount, startDate: @shorten.start_date_iso_8601}
-        json_response.merge!(lastSeenDate: @shorten.lastSeenDate) if @shorten.redirectCount > 0
+        json_response = {redirect_count: @shorten.redirect_count, start_date: @shorten.start_date_iso_8601}
+        json_response.merge!(last_seen_date: @shorten.last_seen_date) if @shorten.redirect_count > 0
 
         render json: json_response
       end
