@@ -2,11 +2,39 @@
 
 A simple URL shortener.
 
+## Summary
+- [Projects](#projects)
+- [Stack](#stack)
+  * [Tools](#tools)
+    + [Lints](#lints)
+      - [Ruby](#ruby)
+      - [Git](#git)
+- [Setup](#setup)
+  * [Downloading and installation](#downloading-and-installation)
+- [Running](#running)
+- [Available commands](#available-commands)
+- [Endpoints](#endpoints)
+  * [POST shorten](#post-shorten)
+    + [Returns](#returns)
+    + [Errors](#errors)
+  * [GET shorten](#get-shorten)
+    + [Returns](#returns-1)
+    + [Errors](#errors-1)
+  * [GET stats](#get-stats)
+    + [Returns](#returns-2)
+    + [Errors](#errors-2)
+
 # Projects
 
 - [First release](https://github.com/rodrigo93/shortify/projects/1)
 
 # Stack
+
+- Docker
+- SQLite
+- Rails 6.0.0
+- Ruby 2.6.5
+- Rspec
 
 ## Tools
 
@@ -42,11 +70,17 @@ $ docker-compose up
 
 This might take some minutes, depending on you internet speed to download the necessary images.
 
-## Running
+# Running
 
-_TODO_
+All you need to do to run this project is running the following command in the root directory of this project:
 
-### Available commands
+```shell
+$ docker-compose up
+```
+
+Wait for the build and shortify! :D
+
+# Available commands
 
 > `dev/bash`
 
@@ -91,3 +125,109 @@ Start all containers from this project.
 > `dev/stop`
 
 Stop all containers from this project.
+
+# Endpoints
+
+## POST shorten
+
+```
+POST /shorten
+Content-Type: "application/json"
+
+{
+  "url": "http://example.com",
+  "shortcode": "example"
+}
+```
+
+Attribute | Description
+--------- | -----------
+**url**   | url to shorten
+shortcode | preferential shortcode
+
+
+### Returns
+
+```
+201 Created
+Content-Type: "application/json"
+
+{
+  "shortcode": :shortcode
+}
+```
+
+A random shortcode is generated if none is requested, the generated short code has exactly 6 alpahnumeric characters and passes the following regexp: ```^[0-9a-zA-Z_]{6}$```.
+
+### Errors
+
+Error | Description
+----- | ------------
+400   | ```url``` is not present
+409   | The the desired shortcode is already in use. **Shortcodes are case-sensitive**.
+422   | The shortcode fails to meet the following regexp: ```^[0-9a-zA-Z_]{4,}$```.
+
+
+## GET shorten
+
+```
+GET /:shortcode
+Content-Type: "application/json"
+```
+
+Attribute      | Description
+-------------- | -----------
+**shortcode**  | url encoded shortcode
+
+### Returns
+
+**302** response with the location header pointing to the shortened URL
+
+```
+HTTP/1.1 302 Found
+Location: http://www.example.com
+```
+
+### Errors
+
+Error | Description
+----- | ------------
+404   | The ```shortcode``` cannot be found in the system
+
+
+## GET stats
+
+```
+GET /:shortcode/stats
+Content-Type: "application/json"
+```
+
+Attribute      | Description
+-------------- | -----------
+**shortcode**  | url encoded shortcode
+
+### Returns
+
+```
+200 OK
+Content-Type: "application/json"
+
+{
+  "start_date": "2012-04-23T18:25:43.511Z",
+  "last_seen_date": "2012-04-23T18:25:43.511Z",
+  "redirect_count": 1
+}
+```
+
+Attribute         | Description
+--------------    | -----------
+**start_date**     | date when the url was encoded, conformant to [ISO8601](http://en.wikipedia.org/wiki/ISO_8601)
+**redirect_count** | number of times the endpoint ```GET /shortcode``` was called
+**last_seen_date**      | date of the last time the a redirect was issued, not present if ```redirect_count == 0```
+
+
+### Errors
+
+Error | Description
+----- | ------------
+404   | The ```shortcode``` cannot be found in the system
