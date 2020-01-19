@@ -3,7 +3,6 @@
 A simple URL shortener.
 
 ## Summary
-- [Projects](#projects)
 - [Stack](#stack)
   * [Tools](#tools)
     + [Lints](#lints)
@@ -23,10 +22,6 @@ A simple URL shortener.
   * [GET stats](#get-stats)
     + [Returns](#returns-2)
     + [Errors](#errors-2)
-
-# Projects
-
-- [First release](https://github.com/rodrigo93/shortify/projects/1)
 
 # Stack
 
