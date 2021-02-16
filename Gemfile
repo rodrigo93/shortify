@@ -53,13 +53,13 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 
   # Linter Gems
-  gem 'pronto', '~> 0.10.0'
-  gem 'pronto-brakeman', '~> 0.10.0', require: false
-  gem 'pronto-fasterer', '~> 0.10.0', require: false
-  gem 'pronto-flay', '~> 0.10.0', require: false
-  gem 'pronto-poper', '~> 0.10.0', require: false
-  gem 'pronto-reek', '~> 0.10.0', require: false
-  gem 'pronto-rubocop', '~> 0.10.0', require: false
+  gem 'pronto'
+  gem 'pronto-brakeman', require: false
+  gem 'pronto-fasterer', require: false
+  gem 'pronto-flay', require: false
+  gem 'pronto-poper', require: false
+  gem 'pronto-reek', require: false
+  gem 'pronto-rubocop', require: false
 end
 
 group :test do
