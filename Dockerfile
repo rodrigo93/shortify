@@ -21,6 +21,7 @@ WORKDIR /app
 # Install gems
 COPY Gemfile* /app/
 ENV BUNDLE_PATH /gems
+RUN gem install bundler:2.2.10
 RUN bundle install
 
 # Copy all remaining app files to the image
